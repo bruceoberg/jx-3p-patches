@@ -19,7 +19,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 GOLDEN_WAV = FIXTURES / "patchdump.wav"
 GOLDEN_CSV = FIXTURES / "patchdump.csv"
-DECODER_BIN = REPO_ROOT / "c" / "decoder" / "bin" / "decode_patches"
+DECODER_BIN = REPO_ROOT / "build" / "decoder" / "bin" / "decode_patches"
 
 
 def _read_csv_rows(path: Path) -> tuple[list[str], list[list[str]]]:

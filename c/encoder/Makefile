@@ -1,30 +1,34 @@
 CFLAGS=-Wall
 LIBS=-lsndfile
-READER_OBJS=reader.o
-WRITER_OBJS=writer.o audio.o csv_parser.o
+BUILD ?= build
+OBJDIR := $(BUILD)/obj
+BINDIR := $(BUILD)/bin
+READER_OBJS := $(addprefix $(OBJDIR)/, reader.o)
+WRITER_OBJS := $(addprefix $(OBJDIR)/, writer.o audio.o csv_parser.o)
 
-.PHONY: all
-all: reader writer
+.PHONY: all clean
+all: $(BINDIR)/reader $(BINDIR)/writer
 
-audio.o: audio.c
-	gcc $(CFLAGS) -c audio.c
+$(OBJDIR) $(BINDIR):
+	mkdir -p $@
 
-reader.o: reader.c
-	gcc $(CFLAGS) -c reader.c
+$(OBJDIR)/audio.o: audio.c | $(OBJDIR)
+	gcc $(CFLAGS) -c -o $@ audio.c
 
-writer.o: writer.c audio.h
-	gcc $(CFLAGS) -c writer.c
+$(OBJDIR)/reader.o: reader.c | $(OBJDIR)
+	gcc $(CFLAGS) -c -o $@ reader.c
 
-csv_parser.o: csv_parser.c patch.h
-	gcc $(CFLAGS) -c csv_parser.c
+$(OBJDIR)/writer.o: writer.c audio.h | $(OBJDIR)
+	gcc $(CFLAGS) -c -o $@ writer.c
 
-reader: $(READER_OBJS)
-	gcc $(CFLAGS) $(LIBS) -o reader $(READER_OBJS)
+$(OBJDIR)/csv_parser.o: csv_parser.c patch.h | $(OBJDIR)
+	gcc $(CFLAGS) -c -o $@ csv_parser.c
 
-writer: $(WRITER_OBJS)
-	gcc $(CFLAGS) $(LIBS) -o writer $(WRITER_OBJS)
+$(BINDIR)/reader: $(READER_OBJS) | $(BINDIR)
+	gcc $(CFLAGS) $(LIBS) -o $@ $(READER_OBJS)
 
-.PHONY: clean
+$(BINDIR)/writer: $(WRITER_OBJS) | $(BINDIR)
+	gcc $(CFLAGS) $(LIBS) -o $@ $(WRITER_OBJS)
+
 clean:
-	rm -f reader writer
-	rm -f *.o
+	rm -rf $(BUILD)

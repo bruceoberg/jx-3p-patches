@@ -62,10 +62,11 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
-build/
 dist/
 *.egg-info/
 
-# C encoder binaries (built beside source; the decoder uses a bin/ subdir instead)
-/c/encoder/reader
-/c/encoder/writer
+# Build outputs (covers both root /build/ and per-subproject c/*/build/)
+build/
+
+# direnv
+.envrc
