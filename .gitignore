@@ -53,3 +53,19 @@ dkms.conf
 
 # MacOS
 .DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# C encoder binaries (built beside source; the decoder uses a bin/ subdir instead)
+/c/encoder/reader
+/c/encoder/writer

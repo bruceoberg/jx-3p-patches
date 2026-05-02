@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bruceoberg/jx-3p-patches/schemas/bank.schema.json",
+  "title": "JX-3P Patch Collection",
+  "description": "A full 2-bank, 16-patches-per-bank JX-3P patch collection.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "banks"],
+  "properties": {
+    "format_version": {
+      "description": "Version of this JSON format. Currently only \"1.0\" is supported.",
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "banks": {
+      "description": "Two banks (C, D) of 16 patches each, in patch-number order.",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "array",
+        "minItems": 16,
+        "maxItems": 16,
+        "items": {
+          "$ref": "patch.schema.json"
+        }
+      }
+    }
+  }
+}
