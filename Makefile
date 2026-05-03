@@ -6,7 +6,7 @@ c:
 	$(MAKE) -C c
 
 test:
-	uv run pytest tests/
+	uv run --extra dev pytest tests/
 
 install:
 	uv tool install .
