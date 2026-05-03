@@ -128,4 +128,4 @@ The `mystery` field is preserved by every conversion. See [patch-format.md](patc
 
 ## Status
 
-The schemas and the in-memory dataclass exist and validate today. The CLI subcommands that read and write JSON (`jx3p wav-to-json`, `json-to-wav`, `csv-to-json`, `json-to-csv`) are stubbed pending implementation of `jx3p/codec.py` and `jx3p/formats.py`.
+The schemas, the in-memory dataclass ([jx3p/patch.py](../jx3p/patch.py)), the WAV codec ([jx3p/codec.py](../jx3p/codec.py)), and the CSV/JSON readers and writers ([jx3p/formats.py](../jx3p/formats.py)) are all implemented and covered by the test suite. The CLI subcommands `jx3p wav-to-json`, `json-to-wav`, `csv-to-json`, and `json-to-csv` are fully wired up and exercised against the golden fixtures.

@@ -6,7 +6,7 @@ The JX-3P has no MIDI patch dump capability — the only way to back up its patc
 
 - A **C decoder** that converts a tape-dump WAV file into CSV
 - A **C encoder** that converts a CSV back into a tape-dump WAV file
-- A Python package (`jx3p`) — *in progress* — that mirrors the C tools and adds JSON ↔ WAV/CSV conversion
+- A Python package (`jx3p`) that mirrors the C tools and adds JSON ↔ WAV/CSV conversion
 - **JSON Schemas** describing the patch and bank formats
 
 End-user musician install instructions are in [docs/install.md](docs/install.md). The rest of this README is for people building from source.
@@ -28,10 +28,9 @@ c/
   decoder/        — C decoder (phaysis):  WAV → CSV
   encoder/        — C encoder (jviikki):  CSV → WAV
   Makefile        — orchestrates the C build
-jx3p/             — Python package (in progress)
+jx3p/             — Python package: WAV/CSV/JSON codec + CLI
 schemas/          — JSON Schemas (single patch + 2-bank collection)
-tests/            — pytest suite (parity tests against the C decoder)
-testdata/         — original sample WAV/CSV from upstream
+tests/            — pytest suite, plus golden WAV/CSV/JSON fixtures under tests/fixtures/
 docs/             — documentation
 build/            — C build artifacts (gitignored)
 Makefile          — root: delegates `make c`, `make test`, `make install`
@@ -114,9 +113,8 @@ After `make c`, all binaries live under `build/decoder/bin/` and `build/encoder/
 | Tool | Description |
 |---|---|
 | `build/decoder/bin/decode_patches WAV` | Decode a tape-dump WAV. Writes `patchdump.csv` in the current directory. |
-| `build/decoder/bin/analyzer WAV` | *(diagnostic)* Emit zero-crossing lengths from a WAV. |
-| `build/decoder/bin/bitstream WAV` | *(diagnostic)* Emit the raw FSK bitstream from a WAV. |
-| `build/decoder/bin/c1diff WAV1 WAV2` | *(diagnostic)* Compare patch C01 between two tape dumps. |
+
+Three additional diagnostic tools (`analyzer`, `bitstream`, `c1diff`) live in [c/decoder/src/](c/decoder/src/) but are not part of the default build. Build them with `make -C c/decoder all` if you need them.
 
 For best decode results, see the audio-preparation notes in [c/decoder/USAGE.txt](c/decoder/USAGE.txt) — short version: 16-bit mono, 44.1 kHz, normalised between -12 dB and -1 dB, recorded directly from the JX-3P tape jack.
 
@@ -138,7 +136,7 @@ After `make install` (or `uv tool install .`), the `jx3p` command is on your PAT
 | `jx3p csv-to-json IN.csv OUT.json` | Convert a CSV patch bank to JSON. |
 | `jx3p json-to-csv IN.json OUT.csv` | Convert a JSON patch bank to CSV. |
 
-> **Status:** the dataclass and JSON schemas are complete; codec and formats I/O are still stubs. Use the C tools for actual conversions today.
+The `jx3p` CLI, the WAV codec, and the CSV/JSON readers and writers are all implemented and tested against the golden fixtures under [tests/fixtures/](tests/fixtures/).
 
 ## License
 
