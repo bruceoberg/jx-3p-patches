@@ -1,4 +1,4 @@
-CFLAGS=-Wall
+CFLAGS=-Wall -I../include
 LIBS=-lsndfile
 BUILD ?= build
 OBJDIR := $(BUILD)/obj

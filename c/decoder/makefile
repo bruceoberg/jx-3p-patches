@@ -16,12 +16,13 @@ endif
 
 incdir=include
 srcdir=src
+sharedincdir=../include
 BUILD ?= build
 objdir=$(BUILD)/obj
 bindir=$(BUILD)/bin
 libdir=$(call FixPath, lib/$(OS))
 CC=gcc
-CFLAGS=-I$(incdir) -Wall -g
+CFLAGS=-I$(incdir) -I$(sharedincdir) -Wall -g
 
 
 # targets
