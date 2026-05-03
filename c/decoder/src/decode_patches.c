@@ -20,7 +20,7 @@ SNDFILE		*infile;
 SF_INFO		sfinfo;
 const char	*infilename;
 FILE		*patchfile_csv;
-const char	*patchfilename_csv = "patchdump.csv";
+const char	*patchfilename_csv = "patchdump.csv";	// default; overridden by argv[2]
 FILE		*patchfile_smf;
 const char	*patchfilename_smf = "patchdump.mid";
 
@@ -51,16 +51,16 @@ int main( int argc, char *argv[] )
 	// master count of errors. Pause for user input at end if > 0.
 	int error_count = 0;
 
-// TODO: add arguments for flexibility
-	// check argc for filename
-	if ( argc < 2 ) /* look for wave filename on command line */
+	// check argc for filename(s)
+	if ( argc < 2 || argc > 3 )
     {
-        fprintf(stderr, "usage: %s (wavfilename)", argv[0] );
+        fprintf(stderr, "usage: %s <wavfile> [output.csv]\n", argv[0] );
         return 1;
     }
-    else
-    {
-		infilename = argv[1];
+	infilename = argv[1];
+	if ( argc == 3 )
+	{
+		patchfilename_csv = argv[2];
 	}
 
 	if (!(opt_csv || opt_midi))

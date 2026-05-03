@@ -8,7 +8,6 @@ is wired up.
 from __future__ import annotations
 
 import csv
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -41,18 +40,14 @@ def decoder_binary() -> Path:
 
 def test_c_decoder_matches_golden_csv(decoder_binary: Path, tmp_path: Path) -> None:
     """Run the C decoder against the golden WAV and diff its output vs the golden CSV."""
-    wav_copy = tmp_path / "patchdump.wav"
-    shutil.copy(GOLDEN_WAV, wav_copy)
-
+    out_csv = tmp_path / "decoded.csv"
     subprocess.run(
-        [str(decoder_binary), str(wav_copy)],
-        cwd=tmp_path,
+        [str(decoder_binary), str(GOLDEN_WAV), str(out_csv)],
         capture_output=True,
         text=True,
         check=True,
     )
 
-    out_csv = tmp_path / "patchdump.csv"
     expected_header, expected_rows = _read_csv_rows(GOLDEN_CSV)
     actual_header, actual_rows = _read_csv_rows(out_csv)
 
@@ -81,16 +76,13 @@ def test_python_decoder_matches_c_decoder(decoder_binary: Path, tmp_path: Path) 
 
     banks = codec.read_wav(GOLDEN_WAV)
 
-    wav_copy = tmp_path / "patchdump.wav"
-    shutil.copy(GOLDEN_WAV, wav_copy)
+    c_csv = tmp_path / "decoded.csv"
     subprocess.run(
-        [str(decoder_binary), str(wav_copy)],
-        cwd=tmp_path,
+        [str(decoder_binary), str(GOLDEN_WAV), str(c_csv)],
         capture_output=True,
         text=True,
         check=True,
     )
-    c_csv = tmp_path / "patchdump.csv"
     expected_header, expected_rows = _read_csv_rows(c_csv)
     _ = expected_header, expected_rows, banks
     raise NotImplementedError("comparison harness pending codec implementation")
